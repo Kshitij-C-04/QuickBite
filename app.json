@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "fast_food",
+    "name": "QuickBite",
     "slug": "fast_food",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "fastfood",
+    "scheme": "quickbite",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kshitij.quickbite"
     },
     "web": {
       "bundler": "metro",
@@ -33,18 +34,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "food-ordering",
-          "organization": "personal-6mg"
-        }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9d3d70da-0b5a-4666-b9e9-3b32c8b21fe8"
+      }
+    },
+    "owner": "kshitij23"
   }
 }

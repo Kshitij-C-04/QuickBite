@@ -1,16 +1,10 @@
 const { getDefaultConfig } = require("expo/metro-config");
 const { withNativeWind } = require("nativewind/metro");
-const { getSentryExpoConfig } = require("@sentry/react-native/metro");
 
-let config = getDefaultConfig(__dirname);
+const config = getDefaultConfig(__dirname);
 
-// Apply Sentry config
-config = getSentryExpoConfig(__dirname);
-
-// Fix import.meta issues (important for Expo Web)
+// Fix import.meta issues (Expo Web fix)
 config.resolver.unstable_enablePackageExports = false;
 
 // Apply NativeWind
-config = withNativeWind(config, { input: "./app/globals.css" });
-
-module.exports = config;
+module.exports = withNativeWind(config, { input: "./app/globals.css" });
