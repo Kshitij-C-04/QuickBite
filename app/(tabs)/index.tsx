@@ -86,14 +86,13 @@ export default function Index() {
                     isEven ? "pl-14 pr-4" : "pr-14 pl-4"
                   )}
                 >
-                  <Text className="text-white text-xl font-bold leading-tight">
+                  <Text className="text-white text-3xl font-bold leading-tight">
                     {item.title}
                   </Text>
-
-                  <View className="mt-4 w-12 h-10 justify-center items-center">
+                  <View className="mt-4 w-16 h-12 justify-center items-center">
                     <Image
                       source={images.arrowRight}
-                      className="w-5 h-5"
+                      className="w-12 h-12"
                       resizeMode="contain"
                       tintColor="#fff"
                     />

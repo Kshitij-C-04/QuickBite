@@ -41,7 +41,7 @@ client
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const storage = new Storage(client);
-const avatars = new Avatars(client);
+export const avatars = new Avatars(client);
 
 
 // CREATE USER

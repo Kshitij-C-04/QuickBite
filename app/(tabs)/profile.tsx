@@ -1,18 +1,23 @@
+{
+  /*Button is used to seed the database*/
+}
+{
+  /* <CustomButton title="Seed" onPress={() => seed().catch((error) => console.log(error))} /> */
+}
 
-            {/*Button is used to seed the database*/}
-            {/* <CustomButton title="Seed" onPress={() => seed().catch((error) => console.log(error))} /> */}
-
-
-      {/* Button is used to seed the database */}
-      {/* <TouchableOpacity
+{
+  /* Button is used to seed the database */
+}
+{
+  /* <TouchableOpacity
         className="border border-primary mx-6 mt-4 py-4 rounded-full items-center"
         onPress={() => seed().catch((error: any) => console.log(error))}
       >
         <Text className="text-primary font-bold text-base">
           Seed Database
         </Text>
-      </TouchableOpacity> */}
-
+      </TouchableOpacity> */
+}
 
 import {
   View,
@@ -23,13 +28,14 @@ import {
   TextInput,
   Modal,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { account } from "@/lib/appwrite";
 import useAuthStore from "@/store/auth.store";
 import { useRouter } from "expo-router";
+import { avatars } from "@/lib/appwrite";
 
 export default function Profile() {
-
   const router = useRouter();
   const { logout } = useAuthStore();
 
@@ -63,14 +69,10 @@ export default function Profile() {
     getUser();
   }, []);
 
-  // ✅ LOGOUT FUNCTION
   const handleLogout = async () => {
     try {
       await logout();
-
-      // redirect to signin
       router.replace("/(auth)/sign-in");
-
     } catch (error) {
       console.log("Logout error:", error);
     }
@@ -107,9 +109,7 @@ export default function Profile() {
         setModalVisible(false);
         getUser();
       }, 1200);
-
     } catch (error: any) {
-
       console.log("Full error:", error);
 
       if (error?.message) {
@@ -117,21 +117,19 @@ export default function Profile() {
       } else {
         setErrorMessage("Something went wrong");
       }
-
     }
   };
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <SafeAreaView className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View className="flex-1 bg-white">
-
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
       {/* Header */}
       <View className="bg-orange-500 h-48 items-center justify-end pb-16 rounded-b-[40px]">
         <Text className="text-white text-xl font-bold">My Profile</Text>
@@ -140,11 +138,11 @@ export default function Profile() {
       {/* Avatar */}
       <View className="items-center -mt-16">
         <Image
-          source={{
-            uri: `https://ui-avatars.com/api/?name=${user?.name}&background=ff7a00&color=fff`,
-          }}
-          className="w-32 h-32 rounded-full border-4 border-white"
-        />
+  source={{
+    uri: avatars.getInitialsURL(user?.name).toString(),
+  }}
+  className="w-32 h-32 rounded-full border-4 border-white"
+/>
       </View>
 
       {/* Name + Email */}
@@ -155,7 +153,6 @@ export default function Profile() {
 
       {/* Info Card */}
       <View className="mx-6 mt-8 bg-gray-50 rounded-2xl p-5">
-
         <View className="mb-5">
           <Text className="text-gray-400 text-sm">Full Name</Text>
           <Text className="text-base font-semibold">{user?.name}</Text>
@@ -165,7 +162,6 @@ export default function Profile() {
           <Text className="text-gray-400 text-sm">Email Address</Text>
           <Text className="text-base font-semibold">{user?.email}</Text>
         </View>
-
       </View>
 
       {/* Edit Button */}
@@ -186,18 +182,13 @@ export default function Profile() {
 
       {/* Edit Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
-
         <View className="flex-1 justify-center items-center bg-black/40">
-
           <View className="bg-white w-[85%] p-6 rounded-2xl">
-
             <Text className="text-lg font-bold mb-4">Edit Profile</Text>
 
             {errorMessage !== "" && (
               <View className="bg-red-100 p-3 rounded-lg mb-3">
-                <Text className="text-red-600 text-center">
-                  {errorMessage}
-                </Text>
+                <Text className="text-red-600 text-center">{errorMessage}</Text>
               </View>
             )}
 
@@ -245,13 +236,9 @@ export default function Profile() {
             >
               <Text className="text-gray-500">Cancel</Text>
             </TouchableOpacity>
-
           </View>
-
         </View>
-
       </Modal>
-
-    </View>
+    </SafeAreaView>
   );
 }

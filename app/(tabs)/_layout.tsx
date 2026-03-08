@@ -23,10 +23,13 @@ const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => {
       />
 
       <Text
+        numberOfLines={1}
         style={{
           fontSize: 12,
           color: focused ? "#FE8C00" : "#777",
           marginTop: 4,
+          width: 60,
+          textAlign: "center",
         }}
       >
         {title}
@@ -93,7 +96,11 @@ export default function TabLayout() {
         name="profile"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon icon={images.person} title="Profile" focused={focused} />
+            <TabBarIcon
+              icon={images.person}
+              title="Profile"
+              focused={focused}
+            />
           ),
         }}
       />

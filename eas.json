@@ -5,14 +5,25 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "node": "18.18.0",
+      "env": {
+        "NODE_ENV": "development"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "node": "18.18.0",
+      "env": {
+        "NODE_ENV": "preview"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "node": "18.18.0",
+      "autoIncrement": true,
+      "env": {
+        "NODE_ENV": "production",
+        "EXPO_PUBLIC_APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+        "EXPO_PUBLIC_APPWRITE_PROJECT_ID": "695bb394003d55bde366"
+      }
     }
   },
   "submit": {

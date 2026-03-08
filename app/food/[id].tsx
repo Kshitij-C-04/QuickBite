@@ -44,18 +44,36 @@ export default function FoodDetails() {
         const relations = await databases.listDocuments(
           appwriteConfig.databaseId,
           appwriteConfig.menuCustomizationsCollectionId,
-          [
-            Query.equal("menu", id)
-          ]
+          [Query.equal("menu", id)]
         );
 
-        const customizations = relations.documents.map(
-          (doc: any) => doc.customizations
+        // ✅ Fetch actual customization documents safely
+        const customizations = await Promise.all(
+          relations.documents.map(async (doc: any) => {
+
+            const customizationId =
+              typeof doc.customizations === "string"
+                ? doc.customizations
+                : doc.customizations?.$id;
+
+            if (!customizationId) return null;
+
+            const customization = await databases.getDocument(
+              appwriteConfig.databaseId,
+              appwriteConfig.customizationsCollectionId,
+              customizationId
+            );
+
+            return customization;
+
+          })
         );
+
+        const filteredCustomizations = customizations.filter(Boolean);
 
         setItem({
           ...menuItem,
-          customizations
+          customizations: filteredCustomizations
         });
 
       } catch (error) {
@@ -83,8 +101,11 @@ export default function FoodDetails() {
   };
 
   const totalPrice =
-    item.price +
-    selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+    Number(item.price) +
+    selectedAddons.reduce(
+      (sum, addon) => sum + Number(addon.price || 0),
+      0
+    );
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -113,7 +134,7 @@ export default function FoodDetails() {
             ${totalPrice.toFixed(2)}
           </Text>
 
-          <Text numberOfLines={2} className="text-gray-500 mt-3">
+          <Text className="text-gray-500 mt-3">
             {item.description}
           </Text>
 
@@ -133,7 +154,9 @@ export default function FoodDetails() {
               horizontal
               showsHorizontalScrollIndicator={false}
               data={item.customizations}
-              keyExtractor={(addon: any) => addon.$id}
+              keyExtractor={(addon: any, index) =>
+  addon?.$id ? addon.$id : index.toString()
+}
               contentContainerStyle={{ gap: 12 }}
               renderItem={({ item: addon }: any) => {
 
@@ -144,7 +167,8 @@ export default function FoodDetails() {
                 return (
                   <TouchableOpacity
                     onPress={() => toggleAddon(addon)}
-                    className={`border rounded-xl px-4 py-3 min-w-[130px] ${
+                    style={{ minWidth: 130 }}
+                    className={`border rounded-xl px-4 py-3 ${
                       selected
                         ? "border-primary bg-primary/10"
                         : "border-gray-200"
@@ -152,11 +176,11 @@ export default function FoodDetails() {
                   >
 
                     <Text numberOfLines={1} className="font-semibold text-dark-100">
-                      {addon.name}
+                      {addon.name || "Addon"}
                     </Text>
 
                     <Text className="text-primary font-bold mt-1">
-                      +${addon.price}
+                      +${Number(addon.price || 0)}
                     </Text>
 
                   </TouchableOpacity>
